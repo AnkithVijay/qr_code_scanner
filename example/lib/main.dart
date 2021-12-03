@@ -112,21 +112,23 @@ class _QRViewExampleState extends State<QRViewExample> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) async {
+      await controller.pauseCamera();
       if (verifiedString.contains(scanData.code)) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Attendance marked"),
         ));
       } else {
         String url = scanData.code.toString();
-        setState(() {
-          verifiedString.add(url);
-        });
-        
+       
         final response = await http.get(Uri.parse(url));
         if (response.statusCode == 200) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Scanned Successfully"),
           ));
+           setState(() {
+            verifiedString.add(url);
+          });
+          await controller.resumeCamera();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Scan Failed"),
