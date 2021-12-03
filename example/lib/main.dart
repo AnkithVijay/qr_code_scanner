@@ -114,7 +114,7 @@ class _QRViewExampleState extends State<QRViewExample> {
     controller.scannedDataStream.listen((scanData) async {
       if (verifiedString.contains(scanData.code)) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Already Verified"),
+          content: Text("Attendance marked"),
         ));
       } else {
         String url = scanData.code.toString();
